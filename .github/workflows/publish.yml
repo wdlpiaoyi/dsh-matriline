@@ -1,0 +1,53 @@
+name: publish
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Tag matches package version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$pkg" ]; then
+            echo "tag v$tag does not match package.json $pkg" >&2
+            exit 1
+          fi
+
+      - name: Check sources
+        run: |
+          node --check index.js
+          node --check client.js
+          node --check state/index.js
+          node --test
+
+      # Publishing needs exactly one credential:
+      #   - NPM_TOKEN: an npm automation token in this repository's secrets. This
+      #     is the path for a brand-new package (the token publishes and claims
+      #     the name in one step);
+      #   - Trusted publishing (no token): after the package exists, add a trusted
+      #     publisher on npmjs.com for this repo + this workflow, delete the
+      #     NODE_AUTH_TOKEN line below, and pin npm >= 12
+      #     (`npm install -g npm@latest`) so npm can trade the GitHub OIDC token.
+      # Provenance (`--provenance`) works in both cases and links the tarball to
+      # this commit.
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance

@@ -50,18 +50,24 @@ Thanks for contributing to `@wdlpiaoyi/dsh-matriline`. This plugin runs inside t
 
 ## Release checklist
 
-- [ ] Bump `version` in `package.json`.
-- [ ] Verify the `files` list covers what should ship. It currently ships `index.js`, `client.js`, `state/`, `cordis.patch.yml`, `README.md`, `README.en.md`, and `LICENSE`; add `SECURITY.md`, `CONTRIBUTING.md`, and `CHANGELOG.md` there if you want the README links to resolve on the npm page.
-- [ ] Verify the README claims against the tree: `engines.node` / `engines.dsh` match the "Environment requirements" and "Compatibility" sections, and the copyright line in `LICENSE` matches the "License" section.
-- [ ] Review the tarball contents:
+- [ ] Bump `version` in `package.json` and add the entry to `CHANGELOG.md`.
+- [ ] Verify the `files` list covers what should ship: `index.js`, `client.js`, `state/`, `cordis.patch.yml`, `README.md`, `README.en.md`, `LICENSE`, `SECURITY.md`, `CONTRIBUTING.md`, `CHANGELOG.md`.
+- [ ] Verify the README claims against the tree (`engines.node`, `engines.dsh`, the `LICENSE` copyright line, and the install targets).
+- [ ] Review the tarball contents with `npm pack --dry-run`.
+- [ ] Commit and push; a clean CI run on `main` is the gate.
 
-  ```bash
-  npm pack --dry-run
-  ```
+### Publishing (tag-triggered)
 
-- [ ] Update `CHANGELOG.md` before tagging.
-- [ ] Commit, tag the release (for example `git tag v0.12.0`), and publish under the `@wdlpiaoyi` scope:
+`.github/workflows/publish.yml` runs on a `v*` tag: it re-runs the checks, verifies the tag equals the `package.json` version, and publishes with npm provenance.
 
-  ```bash
-  npm publish --access public
-  ```
+```bash
+git tag v0.12.0
+git push origin v0.12.0
+```
+
+The workflow needs one credential, configured once:
+
+- **First publish (the package does not exist yet):** create an npm automation token and store it as the `NPM_TOKEN` secret on GitHub (`gh secret set NPM_TOKEN`). The token publishes and claims the name in the same step — trusted publishing cannot bootstrap a package that does not exist yet.
+- **After the package exists:** prefer trusted publishing. On npmjs.com → package settings → Trusted Publisher, point it at this repository and `publish.yml`, delete the `NODE_AUTH_TOKEN` line from the workflow, and pin `npm >= 12` in that job. No long-lived token remains.
+
+Manual fallback: `npm login && npm publish --access public` (needs your 2FA code; use `--otp=123456` when scripting).
