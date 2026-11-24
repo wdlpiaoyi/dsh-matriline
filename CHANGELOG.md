@@ -4,6 +4,16 @@ All notable changes to `@wdlpiaoyi/dsh-matriline`. Format based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project uses
 semantic versioning.
 
+## 0.12.1 — 2026-11-24
+
+### Changed
+
+- Releases are published by CI: pushing a `v*` tag runs
+  `.github/workflows/publish.yml`, which re-runs the checks, verifies the tag
+  matches `package.json`, and publishes with npm provenance.
+- The README install section points at the published npm package instead of an
+  unpublished placeholder.
+
 ## 0.12.0 — first public release
 
 ### Added

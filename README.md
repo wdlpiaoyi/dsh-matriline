@@ -65,14 +65,14 @@ target: git+https://github.com/wdlpiaoyi/dsh-matriline.git
 
 仓库变更后需要核对的事项见 [CONTRIBUTING.md 的发布检查清单](CONTRIBUTING.md#release-checklist)。
 
-### 从 npm 安装（发布后可用）
+### 从 npm 安装
 
 ```text
 action: install_bundle
-target: @wdlpiaoyi/dsh-matriline@0.12.0
+target: @wdlpiaoyi/dsh-matriline
 ```
 
-本包尚未发布到 npm；发布到 `@wdlpiaoyi` scope 后此命令可用。在那之前请使用上面的本地目录或 Git 安装。
+`@wdlpiaoyi/dsh-matriline` 已发布到 npm；需要钉住具体版本时写成 `@wdlpiaoyi/dsh-matriline@<version>`。
 
 ### 配置会话开关
 

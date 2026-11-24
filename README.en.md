@@ -67,14 +67,14 @@ target: git+https://github.com/wdlpiaoyi/dsh-matriline.git
 
 For the items to recheck after repository changes, see the [release checklist in CONTRIBUTING.md](CONTRIBUTING.md#release-checklist).
 
-### Install from npm (available once published)
+### Install from npm
 
 ```text
 action: install_bundle
-target: @wdlpiaoyi/dsh-matriline@0.12.0
+target: @wdlpiaoyi/dsh-matriline
 ```
 
-The package is not on npm yet; this works once it is published under the `@wdlpiaoyi` scope. Until then, use the local-directory or Git install above.
+`@wdlpiaoyi/dsh-matriline` is published on npm; pin an exact version with `@wdlpiaoyi/dsh-matriline@<version>` when needed.
 
 ### Configure the per-session switch
 
