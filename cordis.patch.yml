@@ -1,0 +1,21 @@
+# matriline bundle patch — one package, two Host rows.
+#
+# Both rows live here so the plugin page shows ONE bundle card whose rows are
+# `matriline` (the plugin) and `matriline-state` (the per-session trim map the
+# model-menu switch writes). Two separate bundle declarations used to surface
+# the state half as a second, permanently-disabled-looking card.
+#
+# The state row's module is this package's `./state` subpath, so a single
+# `@wdlpiaoyi/dsh-matriline` install resolves both rows; there is no second
+# package to add.
+#
+# The profile patch keeps only the `config.sessions` override the Settings
+# editor maintains — it must never declare these rows itself.
+- insert:
+    - id: matriline
+      name: '@wdlpiaoyi/dsh-matriline'
+      config: {}
+    - id: matriline-state
+      name: '@wdlpiaoyi/dsh-matriline/state'
+      config:
+        sessions: {}

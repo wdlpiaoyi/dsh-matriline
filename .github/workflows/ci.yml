@@ -1,0 +1,37 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Syntax check
+        run: |
+          node --check index.js
+          node --check client.js
+          node --check state/index.js
+
+      - name: Tests
+        run: node --test
+
+      - name: Smoke import
+        env:
+          DSH_HOME: ${{ runner.temp }}/dsh
+          MATRILINE_HOME: ${{ runner.temp }}/dsh/matriline
+        run: |
+          mkdir -p "$DSH_HOME" "$MATRILINE_HOME"
+          node --input-type=module -e "await import('./index.js'); await import('./state/index.js'); console.log('smoke import ok')"

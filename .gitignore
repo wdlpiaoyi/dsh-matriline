@@ -1,0 +1,23 @@
+node_modules/
+*.log
+.DS_Store
+
+# Runtime state written by the plugin / DSH at run time — never commit it.
+state.json
+config.json
+runs*.jsonl
+matriline.paused
+matriline.noprompt
+.matriline/
+.dsh/
+
+# Local secrets and editor/OS noise.
+.env*
+*.pem
+*.key
+*.p12
+id_rsa*
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini

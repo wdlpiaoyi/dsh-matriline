@@ -1,0 +1,59 @@
+{
+  "name": "@wdlpiaoyi/dsh-matriline",
+  "version": "0.12.0",
+  "description": "Subagent delegation with trimmed tool surfaces, write-scope leases, and a right-sidebar parent/child topology view.",
+  "license": "MIT",
+  "author": "wdlpiaoyi",
+  "engines": {
+    "node": ">=22.15",
+    "dsh": ">=0.2.0-rc.1 <0.3.0"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "subagent",
+    "delegation",
+    "plugin",
+    "subagent-tools",
+    "tool-trimming",
+    "token-reduction",
+    "multi-agent"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wdlpiaoyi/dsh-matriline.git"
+  },
+  "homepage": "https://github.com/wdlpiaoyi/dsh-matriline#readme",
+  "bugs": {
+    "url": "https://github.com/wdlpiaoyi/dsh-matriline/issues"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./state": "./state/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "state/",
+    "cordis.patch.yml",
+    "README.md",
+    "README.en.md",
+    "LICENSE",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": []
+    }
+  }
+}
