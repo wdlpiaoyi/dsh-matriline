@@ -21,6 +21,11 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
+      # Trusted publishing needs npm >= 11.5.1 for the OIDC exchange; the npm
+      # bundled with Node 22 is 10.x, so upgrade before publishing.
+      - name: Upgrade npm
+        run: npm install -g npm@latest
+
       - name: Tag matches package version
         run: |
           tag="${GITHUB_REF_NAME#v}"
@@ -37,17 +42,24 @@ jobs:
           node --check state/index.js
           node --test
 
-      # Publishing needs exactly one credential:
-      #   - NPM_TOKEN: an npm automation token in this repository's secrets. This
-      #     is the path for a brand-new package (the token publishes and claims
-      #     the name in one step);
-      #   - Trusted publishing (no token): after the package exists, add a trusted
-      #     publisher on npmjs.com for this repo + this workflow, delete the
-      #     NODE_AUTH_TOKEN line below, and pin npm >= 12
-      #     (`npm install -g npm@latest`) so npm can trade the GitHub OIDC token.
-      # Provenance (`--provenance`) works in both cases and links the tarball to
-      # this commit.
-      - name: Publish to npm
+      # Auth is optional on purpose: one of
+      #   1. the NPM_TOKEN secret (an npm automation token) — used before the
+      #      package exists, because it both publishes and claims the name;
+      #   2. trusted publishing — after the package exists, configure it on
+      #      npmjs.com (Trusted Publisher: GitHub Actions / wdlpiaoyi /
+      #      dsh-matriline / publish.yml / no environment, allowed action
+      #      `npm publish`). With no token in .npmrc, npm trades the GitHub
+      #      OIDC token for a short-lived publish token.
+      - name: Configure npm auth (only when NPM_TOKEN is set)
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -n "$NPM_TOKEN" ]; then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> "$NPM_CONFIG_USERCONFIG"
+          else
+            echo "no NPM_TOKEN secret: relying on trusted publishing (OIDC)"
+          fi
+
+      # Provenance links the tarball to this commit and works with either auth mode.
+      - name: Publish to npm
         run: npm publish --access public --provenance
