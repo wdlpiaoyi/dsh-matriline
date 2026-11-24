@@ -1,6 +1,6 @@
 {
   "name": "@wdlpiaoyi/dsh-matriline",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "description": "Subagent delegation with trimmed tool surfaces, write-scope leases, and a right-sidebar parent/child topology view.",
   "license": "MIT",
   "author": "wdlpiaoyi",

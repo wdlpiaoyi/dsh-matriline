@@ -4,6 +4,12 @@ All notable changes to `@wdlpiaoyi/dsh-matriline`. Format based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project uses
 semantic versioning.
 
+## 0.12.2 — 2026-11-24
+
+### Changed
+
+- Republished under the current npm account email (metadata only); the package
+  content is unchanged from 0.12.1.
 ## 0.12.1 — 2026-11-24
 
 ### Changed
